@@ -1,7 +1,22 @@
 [project]
 name = "capstonelevel2-smart-banking-assistant"
 version = "0.1.0"
-description = "Add your description here"
+description = "Smart Banking Assistant"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "python-dotenv",
+    "docling",
+    "langchain-core",
+    "langchain-openai",
+    "langchain-postgres",
+    "psycopg[binary]",
+    "pgvector",
+    "sentence-transformers",
+    "tiktoken",
+    "pandas",
+    "pillow",
+]

@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
-from app.routes.query_routes import router as query_router
+from src.api.v1.routes.query_routes import (
+    router as query_router,
+)
 
 
 app = FastAPI(
@@ -11,7 +13,13 @@ app = FastAPI(
 
 @app.get("/")
 def home():
-    return {"message": "Smart Banking Assistant is running"}
+    return {
+        "message": (
+            "Smart Banking Assistant is running"
+        )
+    }
 
 
-app.include_router(query_router)
+app.include_router(
+    query_router
+)
