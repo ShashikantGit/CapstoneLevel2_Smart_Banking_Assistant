@@ -1,0 +1,21 @@
+Metadata-Version: 2.4
+Name: smart-banking-assistant
+Version: 0.1.0
+Summary: Agentic AI Smart Banking Assistant
+Requires-Python: >=3.11
+Requires-Dist: fastapi
+Requires-Dist: uvicorn[standard]
+Requires-Dist: pydantic
+Requires-Dist: pydantic-settings
+Requires-Dist: python-dotenv
+Requires-Dist: sqlalchemy
+Requires-Dist: psycopg[binary]
+Requires-Dist: pgvector
+Requires-Dist: pytest
+Requires-Dist: pytest-asyncio
+Requires-Dist: httpx
+Requires-Dist: psycopg-pool>=3.3.1
+Requires-Dist: langchain-community>=0.4.2
+Requires-Dist: langchain-openai>=1.5.1
+Requires-Dist: docling>=2.120.1
+Requires-Dist: sentence-transformers>=5.7.0

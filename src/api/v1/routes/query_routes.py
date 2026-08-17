@@ -1,39 +1,81 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import (
+    APIRouter,
+    HTTPException,
+    Query,
+)
 
-from app.retrieval.retrieval import retrieve
-
-router = APIRouter(
-    prefix="/query",
-    tags=["Retrieval"],
+from src.api.v1.agents.rag_agent import (
+    run_search_agent,
 )
 
 
-@router.get("/")
-def query_documents(
-    query: str = Query(
-        ...,
-        min_length=1,
-        description="Banking question to search in the knowledge base",
-        examples=["What is the home loan interest rate?"],
-    )
+router = APIRouter(
+    prefix="/query",
+    tags=["Agent"],
+)
+
+
+from src.api.v1.schemas.query_schema import (
+    QueryRequest,
+)
+
+
+@router.post("")
+def query_agent(
+    request: QueryRequest,
 ):
-    """
-    Retrieve relevant banking documents for the given question.
-    """
 
     try:
-        result = retrieve(query)
 
-        return result
+        return run_search_agent(
+            query=request.query,
+            top_k=request.top_k,
+        )
 
     except ValueError as exc:
+
         raise HTTPException(
             status_code=400,
             detail=str(exc),
         ) from exc
 
-    except Exception:
+    except Exception as exc:
+
+        print(
+            f"[agent] Error: {exc}"
+        )
+
         raise HTTPException(
             status_code=500,
-            detail="Unable to retrieve relevant documents.",
+            detail=(
+                "Unable to process "
+                "banking query."
+            ),
+        ) from exc
+    """
+    Run the Smart Banking LangGraph agent.
+    """
+
+    try:
+
+        return run_search_agent(
+            query=query,
         )
+
+    except ValueError as exc:
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(exc),
+        ) from exc
+
+    except Exception as exc:
+
+        print(
+            f"[agent] Error: {exc}"
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to process banking query.",
+        ) from exc

@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: capstonelevel2-smart-banking-assistant
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+
+# CapstoneLevel2_Smart_Banking_Assistant
+A Smart Banking Assistant built for the BFSI domain that goes beyond basic retrieval. It combines multimodal document ingestion (PDFs, images, tables, charts), an intelligent LangGraph-based retrieval agent with retry logic and hybrid search, and a direct RDBMS integration to answer structured data queries — all exposed via a FastAPI backend.

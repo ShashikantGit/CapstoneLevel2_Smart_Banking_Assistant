@@ -1,7 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "capstonelevel2-smart-banking-assistant"
+name = "smart-banking-assistant"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.13"
-dependencies = []
+description = "Agentic AI Smart Banking Assistant"
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+    "sqlalchemy",
+    "psycopg[binary]",
+    "pgvector",
+    "pytest",
+    "pytest-asyncio",
+    "httpx",
+    "psycopg-pool>=3.3.1",
+    "langchain-community>=0.4.2",
+    "langchain-openai>=1.5.1",
+    "docling>=2.120.1",
+    "sentence-transformers>=5.7.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
