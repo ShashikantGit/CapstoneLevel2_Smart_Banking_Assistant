@@ -19,3 +19,4 @@ Requires-Dist: langchain-community>=0.4.2
 Requires-Dist: langchain-openai>=1.5.1
 Requires-Dist: docling>=2.120.1
 Requires-Dist: sentence-transformers>=5.7.0
+Requires-Dist: python-multipart>=0.0.32

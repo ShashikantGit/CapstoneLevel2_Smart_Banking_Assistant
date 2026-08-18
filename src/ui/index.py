@@ -27,7 +27,7 @@ QUERY_API_URL = os.getenv(
 
 UPLOAD_API_URL = os.getenv(
     "UPLOAD_API_URL",
-    "http://localhost:8000/api/v1/admin/upload",
+    "http://localhost:8000/api/v1/upload",
 )
 
 REQUEST_TIMEOUT = 60

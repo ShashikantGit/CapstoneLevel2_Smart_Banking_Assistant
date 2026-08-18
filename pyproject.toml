@@ -25,6 +25,7 @@ dependencies = [
     "langchain-openai>=1.5.1",
     "docling>=2.120.1",
     "sentence-transformers>=5.7.0",
+    "python-multipart>=0.0.32",
 ]
 
 [tool.pytest.ini_options]

@@ -1,5 +1,5 @@
 from pathlib import Path
-from tempfile import NamedTemporaryFile
+import shutil
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
@@ -10,6 +10,40 @@ router = APIRouter(
 )
 
 
+# ============================================================
+# Project directories
+# ============================================================
+
+# upload.py is located at:
+#
+# src/
+#   api/
+#     v1/
+#       routes/
+#         upload.py
+#
+# parents[0] = routes
+# parents[1] = v1
+# parents[2] = api
+# parents[3] = src
+# parents[4] = project root
+#
+BASE_DIR = Path(__file__).resolve().parents[4]
+
+DATA_DIR = BASE_DIR / "data"
+
+
+# Create data directory automatically if it doesn't exist.
+DATA_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+
+# ============================================================
+# Allowed file types
+# ============================================================
+
 ALLOWED_EXTENSIONS = {
     ".pdf",
     ".txt",
@@ -17,13 +51,22 @@ ALLOWED_EXTENSIONS = {
 }
 
 
+# ============================================================
+# Upload endpoint
+# ============================================================
+
 @router.post("")
 async def upload_document(
     file: UploadFile = File(...),
 ):
     """
-    Upload a document for ingestion.
+    Upload a document and permanently store it
+    inside the project's data directory.
     """
+
+    # --------------------------------------------------------
+    # Validate filename
+    # --------------------------------------------------------
 
     if not file.filename:
         raise HTTPException(
@@ -31,9 +74,21 @@ async def upload_document(
             detail="Filename is required.",
         )
 
-    extension = Path(
+    # --------------------------------------------------------
+    # Get file extension
+    # --------------------------------------------------------
+
+    original_filename = Path(
         file.filename
+    ).name
+
+    extension = Path(
+        original_filename
     ).suffix.lower()
+
+    # --------------------------------------------------------
+    # Validate file type
+    # --------------------------------------------------------
 
     if extension not in ALLOWED_EXTENSIONS:
         raise HTTPException(
@@ -45,7 +100,18 @@ async def upload_document(
             ),
         )
 
+    # --------------------------------------------------------
+    # Create destination path
+    # --------------------------------------------------------
+
+    file_path = DATA_DIR / original_filename
+
     try:
+
+        # ----------------------------------------------------
+        # Read uploaded file
+        # ----------------------------------------------------
+
         file_content = await file.read()
 
         if not file_content:
@@ -54,47 +120,27 @@ async def upload_document(
                 detail="Uploaded file is empty.",
             )
 
-        with NamedTemporaryFile(
-            delete=False,
-            suffix=extension,
-        ) as temp_file:
+        # ----------------------------------------------------
+        # Save file permanently
+        # ----------------------------------------------------
 
-            temp_file.write(file_content)
+        with file_path.open("wb") as buffer:
 
-            temp_file_path = Path(
-                temp_file.name
-            )
+            buffer.write(file_content)
 
-        try:
+        # ----------------------------------------------------
+        # Return success response
+        # ----------------------------------------------------
 
-            # TODO:
-            # Connect this to your existing
-            # ingestion pipeline.
-            #
-            # Example:
-            #
-            # result = run_ingestion(
-            #     str(temp_file_path)
-            # )
-
-            result = {
-                "status": "uploaded",
-                "filename": file.filename,
-                "message": (
-                    "File uploaded successfully."
-                ),
-            }
-
-            return result
-
-        finally:
-
-            try:
-                temp_file_path.unlink(
-                    missing_ok=True
-                )
-            except Exception:
-                pass
+        return {
+            "status": "uploaded",
+            "filename": original_filename,
+            "location": str(file_path),
+            "message": (
+                "File uploaded successfully "
+                "and saved to the data folder."
+            ),
+        }
 
     except HTTPException:
         raise
@@ -108,6 +154,6 @@ async def upload_document(
         raise HTTPException(
             status_code=500,
             detail=(
-                "Unable to process uploaded document."
+                "Unable to save uploaded document."
             ),
         ) from exc
