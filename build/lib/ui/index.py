@@ -15,7 +15,7 @@ st.set_page_config(
 # API Configuration
 QUERY_API_URL = "http://localhost:8000/api/v1/query"
 QUERY_STREAM_API_URL = "http://localhost:8000/api/v1/query/stream"
-UPLOAD_API_URL = "http://localhost:8000/api/v1/admin/upload"
+UPLOAD_API_URL = "http://localhost:8000/api/v1/upload"
 
 REQUEST_TIMEOUT = 60
 UPLOAD_TIMEOUT = 120

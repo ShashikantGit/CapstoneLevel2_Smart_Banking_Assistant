@@ -8,6 +8,10 @@ from src.api.v1.routes.query_routes import (
     router as query_router,
 )
 
+from src.api.v1.upload.upload import (
+    router as upload_router,
+)
+
 
 app = FastAPI(
     title="Smart Banking Assistant",
@@ -38,5 +42,10 @@ app.include_router(
 
 app.include_router(
     query_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    upload_router,
     prefix="/api/v1",
 )
